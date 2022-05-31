@@ -16,3 +16,4 @@ inquirer.prompt([
     }
     console.log(chalk.bgYellow.black(`   O nome do usuário é ${ansewers.nome} e sua idade é ${ansewers.idade} anos.`))
 }).catch(err => console.log(err))
+
