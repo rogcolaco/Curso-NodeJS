@@ -3,121 +3,121 @@ const inquirer = require('inquirer')
 const saveData = require('./saveData')
 const fs = require('fs')
 
-module.exports = {
+function saudacaoSaida() {
+    console.log('Obrigado por utilizar os serviços do nosso gerenciador de contas')
+}
 
-    saudacaoSaida() {
-        console.log('Obrigado por utilizar os serviços do nosso gerenciador de contas')
-    },
+function criarConta() {
+    inquirer.prompt([{
+        name: 'nomeConta',
+        message: 'Informe o nome da nova conta: '
+    }]).then((answer) => {
+        var nomeDaConta = answer.nomeConta
 
-    criarConta() {
-        inquirer.prompt([{
-            name: 'nomeConta',
-            message: 'Informe o nome da nova conta: '
-        }]).then((answer) => {
-            var nomeDaConta = answer.nomeConta
-
-            let contaData = {
-                0: {
-                    nome: nomeDaConta,
-                    saldo: 0
-                }
+        let contaData = {
+            0: {
+                nome: nomeDaConta,
+                saldo: 0
             }
-            saveData.saveUserData(nomeDaConta, contaData)
-        })
-    },
+        }
+        saveData.saveUserData(nomeDaConta, contaData)
+    })
+}
 
-    consultaSaldo(nomeDaConta) {
+function consultaSaldo(nomeDaConta) {
+    fs.readFile(`./contas/${nomeDaConta}.txt`, (err, data) => {
+
+        if (data === undefined) throw new Error('Conta não encontrada!!! ')
+        let saldo = JSON.parse(data)[0]['saldo']
+        console.log(`Saldo na conta: R$ ${saldo}`)
+    })
+}
+
+function deposito(nomeDaConta) {
+    inquirer.prompt([{
+        name: 'valorDeposito',
+        message: 'Informe o valor do deposito: '
+    }]).then((answer) => {
         fs.readFile(`./contas/${nomeDaConta}.txt`, (err, data) => {
 
             if (data === undefined) throw new Error('Conta não encontrada!!! ')
-            let saldo = JSON.parse(data)[0]['saldo']
-            console.log(`Saldo na conta: R$ ${saldo}`)
-        })
-    },
+            if(isNaN(answer.valorDeposito)) throw new Error('Valor inválido!!! ')
 
-    deposito(nomeDaConta) {
-        inquirer.prompt([{
-            name: 'valorDeposito',
-            message: 'Informe o valor do deposito: '
-        }]).then((answer) => {
-            fs.readFile(`./contas/${nomeDaConta}.txt`, (err, data) => {
+            let dados = JSON.parse(data)[0]
 
-                if (data === undefined) throw new Error('Conta não encontrada!!! ')
-                if(isNaN(answer.valorDeposito)) throw new Error('Valor inválido!!! ')
-    
-                let dados = JSON.parse(data)[0]
-
-                dados.saldo+=parseFloat(answer.valorDeposito)
-                let contaDados = {
-                    0: {
-                        'nome':dados.nome,
-                        'saldo':dados.saldo
-                    }
+            dados.saldo+=parseFloat(answer.valorDeposito)
+            let contaDados = {
+                0: {
+                    'nome':dados.nome,
+                    'saldo':dados.saldo
                 }
-                saveData.saveUserData(nomeDaConta, contaDados)
-                console.log('Depósito realizado com sucesso!!!')
-            })
-
-        }).catch((err) => {
-            console.log(err)
+            }
+            saveData.saveUserData(nomeDaConta, contaDados)
+            console.log('Depósito realizado com sucesso!!!')
         })
-    },
 
-    retirada(nomeDaConta) {
-        inquirer.prompt([{
-            name: 'valorRetirada',
-            message: 'Informe o valor da retirada: '
-        }]).then((answer) => {
-            fs.readFile(`./contas/${nomeDaConta}.txt`, (err, data) => {
+    }).catch((err) => {
+        console.log(err)
+    })
+}
 
-                if (data === undefined) throw new Error('Conta não encontrada!!! ')
-                if(isNaN(answer.valorRetirada)) throw new Error('Valor inválido!!! ')
-    
-                let dados = JSON.parse(data)[0]
+function retirada(nomeDaConta) {
+    inquirer.prompt([{
+        name: 'valorRetirada',
+        message: 'Informe o valor da retirada: '
+    }]).then((answer) => {
+        fs.readFile(`./contas/${nomeDaConta}.txt`, (err, data) => {
 
-                if(dados.saldo < answer.valorRetirada){
-                    console.log('Saldo insuficiente para efetivar a operação')
-                    this.consultaSaldo(nomeDaConta)
-                    return
-                }
+            if (data === undefined) throw new Error('Conta não encontrada!!! ')
+            if(isNaN(answer.valorRetirada)) throw new Error('Valor inválido!!! ')
 
-                dados.saldo-=parseFloat(answer.valorRetirada)
-                let contaDados = {
-                    0: {
-                        'nome':dados.nome,
-                        'saldo':dados.saldo
-                    }
-                }
-                saveData.saveUserData(nomeDaConta, contaDados)
-                console.log('Retirada realizada com sucesso!!!')
-            })
+            let dados = JSON.parse(data)[0]
 
-        }).catch((err) => {
-            console.log(err)
-        })
-    },
-
-    buscarConta(userAnswer) {
-        inquirer.prompt([{
-            name: 'nomeConta',
-            message: 'Informe o nome da conta: '
-        }]).then((answer) => {
-
-            if (userAnswer === 'Consultar Saldo') {
-                var nomeDaConta = answer.nomeConta
+            if(dados.saldo < answer.valorRetirada){
+                console.log('Saldo insuficiente para efetivar a operação')
                 this.consultaSaldo(nomeDaConta)
-            } else if ( userAnswer === 'Fazer um depósito'){
-                var nomeDaConta = answer.nomeConta
-                this.deposito(nomeDaConta)
-            } else if ( userAnswer === 'Fazer uma retirada'){
-                var nomeDaConta = answer.nomeConta
-                this.retirada(nomeDaConta)
+                return
             }
 
-        }).catch((err) => {
-            console.log(err)
+            dados.saldo-=parseFloat(answer.valorRetirada)
+            let contaDados = {
+                0: {
+                    'nome':dados.nome,
+                    'saldo':dados.saldo
+                }
+            }
+            saveData.saveUserData(nomeDaConta, contaDados)
+            console.log('Retirada realizada com sucesso!!!')
         })
-    },
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+function buscarConta(userAnswer) {
+    inquirer.prompt([{
+        name: 'nomeConta',
+        message: 'Informe o nome da conta: '
+    }]).then((answer) => {
+
+        if (userAnswer === 'Consultar Saldo') {
+            var nomeDaConta = answer.nomeConta
+            consultaSaldo(nomeDaConta)
+        } else if ( userAnswer === 'Fazer um depósito'){
+            var nomeDaConta = answer.nomeConta
+            deposito(nomeDaConta)
+        } else if ( userAnswer === 'Fazer uma retirada'){
+            var nomeDaConta = answer.nomeConta
+            retirada(nomeDaConta)
+        }
+
+    }).catch((err) => {
+        console.log(err)
+    })
+}
+
+module.exports = {
 
     mainMenu() {
         inquirer
@@ -137,17 +137,16 @@ module.exports = {
             .then((answer) => {
                 let userAnswer = answer.mainQuestions
                 if (userAnswer === 'Criar uma conta') {
-                    this.criarConta()
-                    saveData.saveUserData('teste')
+                    criarConta()
                 } else if (userAnswer === 'Consultar Saldo') {
-                    this.buscarConta(userAnswer)
+                    buscarConta(userAnswer)
                 } else if (userAnswer === 'Fazer um depósito') {
-                    this.buscarConta(userAnswer)
+                    buscarConta(userAnswer)
                 } else if (userAnswer === 'Fazer uma retirada') {
-                    this.buscarConta(userAnswer)
+                    buscarConta(userAnswer)
                 }
                 else if (userAnswer === 'Sair') {
-                    this.saudacaoSaida()
+                    saudacaoSaida()
                 }
             })
             .catch((error) => {
