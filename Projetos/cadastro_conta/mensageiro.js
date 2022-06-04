@@ -147,6 +147,7 @@ module.exports = {
                 }
                 else if (userAnswer === 'Sair') {
                     saudacaoSaida()
+                    process.exit()
                 }
             })
             .catch((error) => {
@@ -155,6 +156,6 @@ module.exports = {
                 } else {
                     // Something else went wrong
                 }
-            });
+            })
     }
 }
