@@ -1,15 +1,15 @@
 {
-  "name": "5_modulos_externos",
+  "name": "cadastro_conta",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js && npx cowsay 'Finished with script'"
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "minimist": "^1.2.6"
+    "inquirer": "^8.2.4"
   }
 }
