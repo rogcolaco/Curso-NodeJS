@@ -4,7 +4,7 @@ const saveData = require('./saveData')
 const fs = require('fs')
 
 function saudacaoSaida() {
-    console.log('Obrigado por utilizar os serviços do nosso gerenciador de contas')
+    console.log('Obrigado por utilizar os serviços do nosso gerenciador de contas \n')
 }
 
 function criarConta() {
@@ -21,15 +21,17 @@ function criarConta() {
             }
         }
         saveData.saveUserData(nomeDaConta, contaData)
+        module.exports.mainMenu()
     })
 }
 
 function consultaSaldo(nomeDaConta) {
     fs.readFile(`./contas/${nomeDaConta}.txt`, (err, data) => {
 
-        if (data === undefined) throw new Error('Conta não encontrada!!! ')
+        if (data === undefined) throw new Error('Conta não encontrada!!!  \n')
         let saldo = JSON.parse(data)[0]['saldo']
-        console.log(`Saldo na conta: R$ ${saldo}`)
+        console.log(`Saldo na conta: R$ ${saldo}  \n`)
+        module.exports.mainMenu()
     })
 }
 
@@ -40,8 +42,8 @@ function deposito(nomeDaConta) {
     }]).then((answer) => {
         fs.readFile(`./contas/${nomeDaConta}.txt`, (err, data) => {
 
-            if (data === undefined) throw new Error('Conta não encontrada!!! ')
-            if(isNaN(answer.valorDeposito)) throw new Error('Valor inválido!!! ')
+            if (data === undefined) throw new Error('Conta não encontrada!!!  \n')
+            if(isNaN(answer.valorDeposito)) throw new Error('Valor inválido!!!  \n')
 
             let dados = JSON.parse(data)[0]
 
@@ -53,7 +55,8 @@ function deposito(nomeDaConta) {
                 }
             }
             saveData.saveUserData(nomeDaConta, contaDados)
-            console.log('Depósito realizado com sucesso!!!')
+            console.log('Depósito realizado com sucesso!!! \n')
+            module.exports.mainMenu()
         })
 
     }).catch((err) => {
@@ -68,14 +71,14 @@ function retirada(nomeDaConta) {
     }]).then((answer) => {
         fs.readFile(`./contas/${nomeDaConta}.txt`, (err, data) => {
 
-            if (data === undefined) throw new Error('Conta não encontrada!!! ')
-            if(isNaN(answer.valorRetirada)) throw new Error('Valor inválido!!! ')
+            if (data === undefined) throw new Error('Conta não encontrada!!!  \n')
+            if(isNaN(answer.valorRetirada)) throw new Error('Valor inválido!!!  \n')
 
             let dados = JSON.parse(data)[0]
 
             if(dados.saldo < answer.valorRetirada){
-                console.log('Saldo insuficiente para efetivar a operação')
-                this.consultaSaldo(nomeDaConta)
+                console.log('Saldo insuficiente para efetivar a operação.')
+                consultaSaldo(nomeDaConta)
                 return
             }
 
@@ -87,7 +90,8 @@ function retirada(nomeDaConta) {
                 }
             }
             saveData.saveUserData(nomeDaConta, contaDados)
-            console.log('Retirada realizada com sucesso!!!')
+            console.log('Retirada realizada com sucesso!!! \n')
+            module.exports.mainMenu()
         })
 
     }).catch((err) => {
