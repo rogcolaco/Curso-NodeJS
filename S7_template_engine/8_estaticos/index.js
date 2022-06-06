@@ -6,6 +6,8 @@ const app = express()
 
 const port = 3000
 
+app.use('/static', express.static(__dirname + '/public'))
+
 // const hbs = exphbs.create({
 //     partialsDir: ['views/partials'],
 // })
@@ -23,8 +25,6 @@ app.engine(
 );
 
 app.set('view engine', 'handlebars')
-
-app.use(express.static('public'))
 
 app.get('/login', (req, res) => {
 

@@ -1,11 +1,8 @@
-h1{
+h2 {
     padding: 2em 5em;
+    background: #c2c0c0;
+}
+
+h1{
     color:red;
 }
-
-h2{
-    padding: 2em 5em;
-    color:plum;
-}
-
-p{color:blue;}
