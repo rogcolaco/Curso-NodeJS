@@ -1,0 +1,16 @@
+{{#if auth}}
+<h1>Bem-vindo você está autenticado</h1>
+<a href="/dashboard">Clique para acessar</a>
+{{ else }}
+<h1>Faça login <a href="/login">aqui</a></h1>
+{{/if}}
+<br/>
+<hr/>
+<br/>
+<ul>
+    <li><a href="/login">Login</a></li>
+    <li><a href="/dashboard">Dashboard</a></li>
+</ul>
+<br/>
+<p>O nome do usuário é {{ user.name }} idade: {{ user.idade}}</p>
+<p>{{ palavra }}</p>
