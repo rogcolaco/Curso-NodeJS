@@ -1,0 +1,60 @@
+h1 {
+    color: red;
+    text-align: center;
+}
+
+/* NAVEGACAO */
+nav {
+    width: 100%;
+    border-bottom:1px solid #ccc;
+}
+
+nav ul{
+    display: flex;
+    flex-direction: row;
+}
+
+nav ul li{
+    list-style-type: none;
+    padding: 10px 30px;
+}
+
+.form,
+.books-container,
+#book-page {
+    width: 450px;
+    margin: 0 auto;
+}
+
+.form-control {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: .5em;
+}
+
+.form-control label{
+    margin-bottom: .3em;
+}
+
+.form-control input{
+    padding: 5px;
+}
+
+/* BOOKS */
+.books-container div {
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+    margin: 5px;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.actions{
+    /* background-color: rgb(142, 203, 241);
+    padding: 10px 20px;
+    border-radius: 5px; */
+    margin: 10px 0;
+    /* text-align: center; */
+}
